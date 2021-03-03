@@ -1,5 +1,6 @@
-module.exports = class quize {
+const request = require('request');
 
+class Quiz {
   constructor(apiData) {
     const _quizAll = JSON.parse(apiData).results;
     let _displayQuiz = [];
@@ -30,14 +31,34 @@ module.exports = class quize {
     this.quizAll = _displayQuiz;
     this.answer = _ans
   }
+}
+const checkAns = function (userAnswers, correctAnswers) {
+  let correctCount = 0;
+  userAnswers.forEach((answer, index) => {
+    if (correctAnswers[index] === answer) {
+      correctCount++;
+    }
+  })
+  return correctCount;
+}
 
-  checkAns(answers) {
-    let correctCount = 0;
-    answers.forEach((answer, index) => {
-      if (this.answer[index] === answer) {
-        correctCount++;
+const getQuizFunc = (value) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: 'https://opentdb.com/api.php?amount=10',
+      method: 'GET'
+    }
+    request(options, (err, response, body) => {
+      if (err) {
+        return reject({ errmess: 'geterr' });
       }
+      const responseData = new Quiz(body);
+      return resolve(responseData);
     })
-    return correctCount;
-  }
+  })
+}
+
+module.exports = {
+  getQuizFunc,
+  checkAns
 }

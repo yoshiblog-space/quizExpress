@@ -1,23 +1,18 @@
-const adjustQuiz = require('./AdjustQuiz.js');
-const request = require('request');
-let responseData = [];
-
+const quizApps = require('../models/QuizApps.js');
+let quizAnswer =[];
 module.exports = {
   doGetQuiz(req, res) {
-    const options = {
-      url: 'https://opentdb.com/api.php?amount=10',
-      method: 'GET'
-    }
-    request(options, (err, response, body) => {
-      if (err) {
-        return res.status(502).json(err);
-      }
-      responseData = new adjustQuiz(body);
-      res.json(responseData.quizAll);
+    quizApps.getQuizFunc()
+    .then(getQuiz =>{
+      quizAnswer = getQuiz.answer;
+      res.json(getQuiz.quizAll)
+    })
+    .catch(function () {
+      res.status(500).send('Get Error');
     })
   },
   doGetCheckAns(req, res) {
-    const ansCount = responseData.checkAns(req.body.answer);
+    const ansCount = quizApps.checkAns(req.body.answer, quizAnswer);
     res.json({ answerCount: ansCount });
   }
 }
