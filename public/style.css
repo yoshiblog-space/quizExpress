@@ -1,0 +1,20 @@
+#sentence {
+  border-top: solid 2px silver;
+  border-bottom: solid 2px silver;
+  line-height: 2em;
+  margin: 20px 0;
+}
+h3 {
+  margin: 0;
+}
+.btn {
+  margin-top: 5px;
+  display: block;
+}
+.nondisplay {
+  display: none;
+}
+
+#button {
+  display: block;
+}
